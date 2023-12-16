@@ -5,15 +5,16 @@ import sys
 import time
 
 def factorize(num):
-	"""takes a number as input.
-        Args:
-            num: input integer.
-            Return: A tuple of two factors if the number is not a prime.
-                None if the number is prime."""
-        for i in range(2, int(num**0.5)+1):
-            if num % i == 0:
-                return (i, num//i)
-        return None
+    """takes a number as input.
+    Args:
+        num: input integer.
+        Return: A tuple of two factors if the number is not a prime.
+                None if the number is prime.
+    """
+    for i in range(2, int(num**0.5)+1):
+        if num % i == 0:
+            return (i, num//i)
+    return None
 if __name__ == "__main__":
     """Reads the input file."""
     if len(sys.argv) != 2:
@@ -23,8 +24,8 @@ if __name__ == "__main__":
     input_file = sys.argv[1]
 
     try:
-	with open(input_file, 'r') as f:
-		lines = f.readlines()
+        with open(input_file, 'r') as f:
+            lines = f.readlines()
     except FileNotFoundError:
         print("File not found")
         exit()
