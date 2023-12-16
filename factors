@@ -1,5 +1,9 @@
 #factors.py
 
+from factor_utils import factorize
+
+def main():
+	pass
 import sys
 
 def factorize(n):
