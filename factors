@@ -1,62 +1,49 @@
-#!/usr/bin/python3
-class Square:
-    """Represent a square."""
+#!/usr/bin/env bash
+# is a factors challenge
 
-    def __init__(self, size=0, position=(0, 0)):
-        """Initialize a new square.
+check_factor()
+{
+	if [ $# -ne 3 ];
+        then
+                args=("$@")
+                count=0
+                num2=1
+                for a in ${args[*]};
+                do
+                        if [ $count -gt 1 ];
+                        then
+                                num2=$(echo $a*$num2 | bc)
+                        fi
+                        count=$((count + 1))
+                done
+        else
+                num2=$3
+        fi
 
-        Args:
-            size (int): The size of the new square.
-            position (tuple): The position of the new square.
-        """
-        self.size = size
-        self.position = position
+        num1=$2
+        num=$(echo "$1" | tr ':' '=')
 
-    @property
-    def size(self):
-        """Get.set the current size of the square."""
-        return self.__size
+        result=$(echo "if($num2 > $num1) 1 else 0" | bc)
+	        if ((result == 1)); then
+		        numcp=$num1
+		        num1=$num2
+		        num2=$numcp
+                fi
 
-    @size.setter
-    def size(self, value):
-        if not isinstance(value, int):
-            raise TypeError("size must be an integer")
-        elif value < 0:
-            raise ValueError("size must be >= 0")
-        self.__size = value
+        echo "$num$num1*$num2"
+}
 
-    @property
-    def position(self):
-        """Get/set the current position of the square."""
-        return self.__position
+if [ $# -ne 1 ]
+then
+        echo 'Usage: factors <file>'
+        exit 1
+else
 
-    @position.setter
-    def position(self, value):
-        if (
-                not isinstance(value, tuple)
-                or len(value) != 2
-                or not all(isinstance(num, int) for num in value)
-                or not all(num >= 0 for num in value)
-        ):
-            raise TypeError("position must be a tuple of 2 positive integers")
-        self.__position = value
+        while read i
+        do
 
-    def area(self):
-        """Return the current area of the square."""
-        return self.__size * self.__size
+                result=$(factor "$i")
+                check_factor $result
 
-    def my_print(self):
-        """Prints to stdout the square with the character #,
-        at the position given by the position attribute.
-        """
-        if self.__size == 0:
-            print()
-        else:
-            for y in range(0, self.__position[1]):
-                print()
-            for i in range(0, self.__size):
-                for x in range(0, self.__position[0]):
-                    print(" ", end="")
-                for j in range(0, self.__size):
-                    print("#", end="")
-                print()
+        done < "$1"
+fi
