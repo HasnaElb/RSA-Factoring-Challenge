@@ -1,48 +1,62 @@
 #!/usr/bin/python3
-"""Module that factorize as many numbers as possible
-into a product of two smaller numbers"""
-import sys
-import time
+class Square:
+    """Represent a square."""
 
-def factorize(num):
-    """takes a number as input.
-    Args:
-        num: input integer.
-        Return: A tuple of two factors if the number is not a prime.
-                None if the number is prime.
-    """
-    for i in range(2, int(num**0.5)+1):
-        if num % i == 0:
-            return (i, num//i)
-    return None
-if __name__ == "__main__":
-    """Reads the input file."""
-    if len(sys.argv) != 2:
-        print("Usage: factors <file>")
-        exit()
+    def __init__(self, size=0, position=(0, 0)):
+        """Initialize a new square.
 
-    input_file = sys.argv[1]
+        Args:
+            size (int): The size of the new square.
+            position (tuple): The position of the new square.
+        """
+        self.size = size
+        self.position = position
 
-    try:
-        with open(input_file, 'r') as f:
-            lines = f.readlines()
-    except FileNotFoundError:
-        print("File not found")
-        exit()
+    @property
+    def size(self):
+        """Get.set the current size of the square."""
+        return self.__size
 
-    start_time = time.time()
-    """loops over each line (which should contain one natural number per line
-    and calls factorize on each number.
-    if factorize returns a tuple of factors,
-    it prints the factorization in the desired form"""
-    for line in lines:
-        num = int(line.strip())
-        factors = factorize(num)
-        if factors:
-            print(f"{num}={factors[0]}*{factors[1]}")
+    @size.setter
+    def size(self, value):
+        if not isinstance(value, int):
+            raise TypeError("size must be an integer")
+        elif value < 0:
+            raise ValueError("size must be >= 0")
+        self.__size = value
 
-        """if the elapsed time exceeds 5 seconds,
-        the program exits with an error message."""
-        if time.time() - start_time > 5:
-            print("Time limit exceeded")
-            exit()
+    @property
+    def position(self):
+        """Get/set the current position of the square."""
+        return self.__position
+
+    @position.setter
+    def position(self, value):
+        if (
+                not isinstance(value, tuple)
+                or len(value) != 2
+                or not all(isinstance(num, int) for num in value)
+                or not all(num >= 0 for num in value)
+        ):
+            raise TypeError("position must be a tuple of 2 positive integers")
+        self.__position = value
+
+    def area(self):
+        """Return the current area of the square."""
+        return self.__size * self.__size
+
+    def my_print(self):
+        """Prints to stdout the square with the character #,
+        at the position given by the position attribute.
+        """
+        if self.__size == 0:
+            print()
+        else:
+            for y in range(0, self.__position[1]):
+                print()
+            for i in range(0, self.__size):
+                for x in range(0, self.__position[0]):
+                    print(" ", end="")
+                for j in range(0, self.__size):
+                    print("#", end="")
+                print()
