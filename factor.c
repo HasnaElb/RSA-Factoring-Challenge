@@ -1,23 +1,23 @@
 #include <stdio.h>
 
 void factorize(int num) {
-    printf("%d=", num);
+	printf("%d=", num);
 
-    for (int i = 2; i <= num / 2; ++i) {
-        while (num % i == 0) {
-            printf("%d", i);
-            num /= i;
-            if (num > 1) {
-                printf("*");
-            }
-        }
-    }
+	for (int i = 2; i <= num / 2; ++i) {
+		while (num % i == 0) {
+			printf("%d", i);
+			num /= i;
+			if (num > 1) {
+				printf("*");
+			}
+		}
+	}
 
-    if (num > 1) {
-        printf("%d", num);
-    }
+	if (num > 1) {
+		printf("%d", num);
+	}
 
-    printf("\n");
+	printf("\n");
 }
 
 int main(int argc, char *argv[]) {
