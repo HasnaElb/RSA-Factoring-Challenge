@@ -1,33 +1,42 @@
-#include "factor.h"
+#include <stdio.h>
 
-/**
- * main - main function
- *
- *
- * Return: void
- */
-int main(int argc, char *argv[])
-{
-	FILE *fptr;
-	size_t count;
-	ssize_t line;
-	char *buffer = NULL;
+void factorize(int num) {
+    printf("%d=", num);
 
+    for (int i = 2; i <= num / 2; ++i) {
+        while (num % i == 0) {
+            printf("%d", i);
+            num /= i;
+            if (num > 1) {
+                printf("*");
+            }
+        }
+    }
 
-	if (argc != 2)
-	{
-		fprintf(stderr, "Usage: factors <file>\n");
-		exit(EXIT_FAILURE);
+    if (num > 1) {
+        printf("%d", num);
+    }
+
+    printf("\n");
+}
+
+int main(int argc, char *argv[]) {
+	if (argc != 2) {
+		fprintf(stderr, "Usage: %s <file>\n", argv[0]);
+		return 1;
 	}
-	fptr = fopen(argv[1], "r");
-	if (fptr == NULL)
-	{
-		fprintf(stderr, "Error: can't open file %s\n", argv[1]);
-		exit(EXIT_FAILURE);
+
+	FILE *file = fopen(argv[1], "r");
+	if (file == NULL) {
+		perror("Error opening file");
+		return 1;
 	}
-	while((line = getline(&buffer, &count, fptr)) != -1)
-	{
-		factorize(buffer);
+
+	int num;
+	while (fscanf(file, "%d", &num) == 1) {
+		factorize(num);
 	}
-return (0);
+
+	fclose(file);
+	return 0;
 }
