@@ -1,60 +1,33 @@
-#!/usr/bin/python3
+#include "factor.h"
 
-import sys
-import random
-import time
+/**
+ * main - main function
+ *
+ * Author: Thaoban Abdrasheed
+ * Return: void
+ */
+int main(int argc, char *argv[])
+{
+	FILE *fptr;
+	size_t count;
+	ssize_t line;
+	char *buffer = NULL;
 
-def is_prime(num, k=20):
-    """
-    """
-    if num == 2 or num == 3:
-        return True
-    if num < 2 or num % 2 == 0:
-        return False
 
-    d = num - 1
-    r = 0
-    while d % 2 == 0:
-        d //= 2
-        r += 1
-
-    for _ in range(k):
-        a = random.randint(2, num - 2)
-        x = pow(a, d, num)
-        if x == 1 or x == num - 1:
-            continue
-        for _ in range(r - 1):
-            x = pow(s, 2, num)
-            if x == num - 1:
-                break
-        else:
-            return False
-    
-    return True
-
-if __name__ == "__main__":
-    if len(sys.argv) != 2:
-        print("Usage: rsa <file>")
-        exit()
-
-    input_file = sys.argv[1]
-
-    try:
-        with open(input_file, 'r') as f:
-            lines = f.readlines()
-    except FileNotFoundError:
-        print("File not found")
-        exit()
-
-    start_time = time.time()
-
-    num = int(lines[0].strip())
-
-    for i in range(2, num//2):
-        if num % i == 0 and is_prime(i) and is_prime(num//i):
-            print(f"{num}={i}*{num//i}")
-            break
-
-        if time.time() - start_time > 5:
-            print("Time limit exceeded")
-            exit()
+	if (argc != 2)
+	{
+		fprintf(stderr, "Usage: factor <filename>\n");
+		exit(EXIT_FAILURE);
+	}
+	fptr = fopen(argv[1], "r");
+	if (fptr == NULL)
+	{
+		fprintf(stderr, "Error: can't open file %s\n", argv[1]);
+		exit(EXIT_FAILURE);
+	}
+	while((line = getline(&buffer, &count, fptr)) != -1)
+	{
+		factorize(buffer);
+	}
+return (0);
+}
