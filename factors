@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/usr/bin/env bash
 # is a factors challenge
 
 check_factor()
@@ -8,9 +8,13 @@ check_factor()
 		count=0
 		num2=1
 
-		for a in ${args[*]}; do
+		for a in "${args[@]}"; do
 			if [ $count -gt 1 ]; then
-				num2=$(echo $a*$num2 | bc)
+				if [ "$a" == "*" ]; then
+					num2=$(echo "$num2" | bc)
+				else
+					num2=$(echo $a*$num2 | bc)
+				fi
 			fi
 			count=$((count + 1))
 		done
@@ -37,7 +41,7 @@ if [ $# -ne 1 ]; then
 else
 
 	while read -r i; do
-		result=$(factor "$i" | tr -d '\n')
+		result=$(factor "$i" | tr '\n' ' ')
 		check_factor "$result"
 	done < "$1"
 fi
