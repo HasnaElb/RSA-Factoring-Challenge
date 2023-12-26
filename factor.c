@@ -1,42 +1,56 @@
-#include <stdio.h>
+#!/usr/bin/python3
+import time
+import math
+import sys
 
-void factorize(int num) {
-	printf("%d=", num);
 
-	for (int i = 2; i <= num / 2; ++i) {
-		while (num % i == 0) {
-			printf("%d", i);
-			num /= i;
-			if (num > 1) {
-				printf("*");
-			}
-		}
-	}
+def pollard_rho(n):
+    if n % 2 == 0:
+        return 2
 
-	if (num > 1) {
-		printf("%d", num);
-	}
+    x = 2
+    y = 2
+    d = 1
 
-	printf("\n");
-}
+    def f(x):
+        return (x**2 + 1) % n
 
-int main(int argc, char *argv[]) {
-	if (argc != 2) {
-		fprintf(stderr, "Usage: %s <file>\n", argv[0]);
-		return 1;
-	}
+    while d == 1:
+        x = f(x)
+        y = f(f(y))
+        d = math.gcd(abs(x - y), n)
 
-	FILE *file = fopen(argv[1], "r");
-	if (file == NULL) {
-		perror("Error opening file");
-		return 1;
-	}
+    return d
 
-	int num;
-	while (fscanf(file, "%d", &num) == 1) {
-		factorize(num);
-	}
 
-	fclose(file);
-	return 0;
-}
+def main():
+    if len(sys.argv) != 2:
+        print("Usage: python factorize.py <file>")
+        return
+
+    file_path = sys.argv[1]
+    start_time = time.time()
+
+    try:
+        with open(file_path, 'r') as file:
+            numbers = file.readlines()
+
+        for number in numbers:
+            num = int(number.strip())
+            factor = pollard_rho(num)
+
+            if factor == num:
+                print(f"{num} is prime.")
+            else:
+                print(f"{num}={factor}*{num // factor}")
+
+        if time.time() - start_time > 5:
+            print("Time limit exceeded")
+            exit()
+
+    except FileNotFoundError:
+        print(f"File '{file_path}' not found.")
+
+
+if __name__ == '__main__':
+    main()
